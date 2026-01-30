@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Terraform
@@ -22,26 +22,25 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Init
-        working-directory: Jenkins-CI-CD/Terraform
+        working-directory: Terraform
         run: terraform init
 
       - name: Terraform Validate
-        working-directory: Jenkins-CI-CD/Terraform
+        working-directory: Terraform
         run: terraform validate
 
       - name: Terraform Plan
-        working-directory: Jenkins-CI-CD/Terraform
+        working-directory: Terraform
         run: terraform plan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        working-directory: Jenkins-CI-CD/Terraform
+        working-directory: Terraform
         run: terraform apply -auto-approve
