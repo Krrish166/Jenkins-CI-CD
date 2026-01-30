@@ -1,4 +1,4 @@
-name: Deploy Python App to EC2 using Terraform
+name: Deploy Flask App using Terraform
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Terraform
@@ -22,7 +22,7 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
@@ -30,17 +30,18 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Init
-        working-directory: terraform
+        working-directory: Jenkins-CI-CD/Terraform
         run: terraform init
 
       - name: Terraform Validate
-        working-directory: terraform
+        working-directory: Jenkins-CI-CD/Terraform
         run: terraform validate
 
       - name: Terraform Plan
-        working-directory: terraform
+        working-directory: Jenkins-CI-CD/Terraform
         run: terraform plan
 
       - name: Terraform Apply
-        working-directory: terraform
+        if: github.ref == 'refs/heads/main'
+        working-directory: Jenkins-CI-CD/Terraform
         run: terraform apply -auto-approve
