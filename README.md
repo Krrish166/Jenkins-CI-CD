@@ -1,139 +1,137 @@
-Flask Application Deployment on AWS using Terraform & GitHub Actions
+🚀 Flask Application Deployment on AWS using Terraform & GitHub Actions
 📌 Overview
 
-This project demonstrates how to deploy a Python Flask web application on an AWS EC2 instance using Terraform (Infrastructure as Code) and automate the workflow using GitHub Actions CI/CD.
+       This project demonstrates how to deploy a Python Flask web application on an AWS EC2 instance using Terraform (Infrastructure as Code) and automate the deployment workflow using
+       GitHub Actions CI/CD.
 
-Terraform provisions the AWS infrastructure, while a bootstrap script (user_data) installs dependencies and runs the Flask application automatically at instance launch.
+       Terraform provisions the AWS infrastructure, while a bootstrap script (user_data) installs all required dependencies and runs the Flask application automatically when the EC2 
+       instance launches.
 
 🛠️ Tech Stack
 
-Cloud Provider: AWS
+    Cloud Provider: AWS
 
-Infrastructure as Code: Terraform
+    Infrastructure as Code: Terraform
 
-Application: Python Flask
+    Application: Python Flask
 
-CI/CD: GitHub Actions
+    CI/CD: GitHub Actions
 
-OS: Amazon Linux (EC2)
+Operating System: Amazon Linux (EC2)
 
-📁 Project Structure
-.
-├── main.tf
-├── variables.tf
-├── outputs.tf
-├── .github/
-│   └── workflows/
-│       └── terraform.yml
-└── README.md
+   📁 Project Structure
+   .
+  ├── main.tf
+  ├── variables.tf
+  ├── outputs.tf
+  ├── .github/
+  │   └── workflows/
+  │       └── terraform.yml
+  └── README.md
 
 🚀 What This Project Does
 
-Creates an EC2 instance using Terraform
+   Provisions an AWS EC2 instance using Terraform
 
-Configures a Security Group to allow:
+   Configures a Security Group to allow:
 
-SSH access (port 22)
+   SSH access (port 22)
 
-Flask application access (port 8000)
+   Flask application access (port 8000)
 
-Uses a user_data script to:
+   Uses a user_data script to:
 
-Install Python and pip
+   Install Python and pip
+  
+   Install Flask
 
-Install Flask
+   Create a Flask application (app.py)
 
-Create a Flask application (app.py)
+   Automatically start the Flask app on instance boot
 
-Run the Flask app automatically on startup
-
-Displays a normal HTML web page in the browser after deployment
+   Deploys a simple HTML web page accessible via a browser
 
 🌐 Application Output
 
-After deployment, access the application using:
+   Once deployment is complete, access the application using:
 
-http://<EC2_PUBLIC_IP>:8000
+             http://<EC2_PUBLIC_IP>:8000
 
-Browser Output:
-🚀 Deployment Successful
-Deployed via GitHub Actions + Terraform
+   Browser Output:
+
+             🚀 Deployment Successful
+        Deployed via GitHub Actions + Terraform
 
 ⚙️ Terraform Workflow
 
-Initialize Terraform:
+    Terraform handles both infrastructure provisioning and application deployment.
 
-terraform init
-
-
-Preview infrastructure changes:
-
-terraform plan
+    Steps:
+    terraform init
+    terraform plan
+    terraform apply
 
 
-Apply infrastructure:
+     terraform init → Initializes providers and backend
 
-terraform apply
+     terraform plan → Previews infrastructure changes
 
-
-Terraform provisions the infrastructure and deploys the Flask app automatically using user_data.
+     terraform apply → Provisions AWS resources and deploys the Flask app automatically using user_data
 
 🔁 GitHub Actions CI/CD Pipeline
 
-This project uses GitHub Actions to automate Terraform execution.
+     This project uses GitHub Actions to automate Terraform execution and ensure safe deployments.
 
 CI/CD Flow:
 
-On push or pull request
+     Triggered on push / pull request
 
-Runs terraform init
+     Runs:
 
-Runs terraform validate
+       terraform init
 
-Runs terraform plan
+       terraform validate
 
-Manual approval
+       terraform plan
 
-terraform apply is triggered manually using the GitHub Actions UI
+        Requires manual approval
 
-Prevents accidental infrastructure changes
+       terraform apply is triggered manually via GitHub Actions UI
 
 Benefits:
 
-Automated infrastructure validation
+    Automated infrastructure validation
 
-Safe and controlled deployments
+    Controlled and safe deployments
 
-No manual Terraform execution from local machines
+     Prevents accidental infrastructure changes
 
-Industry-standard DevOps practice
+     No need to run Terraform from local machines
 
-🔐 Security Notes
+    Follows industry-standard DevOps practices
 
-SSH access should be restricted to a trusted IP range
+    🔐 Security Notes
 
-In production:
+    ⚠️ For production environments, additional hardening is recommended.
 
-Use IAM roles instead of access keys
+    Restrict SSH access to trusted IP ranges only
 
-Run Flask with gunicorn and systemd
+    Use IAM roles instead of AWS access keys
 
-Place NGINX in front of the application
+    Run Flask using Gunicorn + systemd
 
-Enable HTTPS using ACM
+    Place NGINX in front of the Flask app
+
+    Enable HTTPS using AWS ACM
 
 🎯 Key DevOps Concepts Demonstrated
 
-Infrastructure as Code (IaC)
+    Infrastructure as Code (IaC)
 
-Automated EC2 bootstrapping with user_data
+    Automated EC2 bootstrapping with user_data
 
-CI/CD for infrastructure using GitHub Actions
+    CI/CD for infrastructure using GitHub Actions
 
-Cloud-based application deployment
-
-Reproducible and scalable infrastructure
-
-🧠 Interview Summary (One Line)
-
-This project showcases deploying a Flask application on AWS using Terraform with automated CI/CD through GitHub Actions, following real-world DevOps best practices.
+    Cloud-based application deployment
+ 
+    Reproducible and scalable infrastructure
