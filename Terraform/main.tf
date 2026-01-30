@@ -2,8 +2,8 @@ provider "aws" {
   region = "ap-south-1"
 }
 
-resource "aws_security_group" "python_sg" {
-  name = "python-app-sg"
+resource "aws_security_group" "flask_sg" {
+  name = "flask-app-sg"
 
   ingress {
     from_port   = 8000
@@ -16,7 +16,7 @@ resource "aws_security_group" "python_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] # tighten later
   }
 
   egress {
@@ -27,34 +27,41 @@ resource "aws_security_group" "python_sg" {
   }
 }
 
-resource "aws_instance" "python_ec2" {
-  ami           = "ami-0ff5003538b60d5ec" # Amazon Linux 2 AMI
+resource "aws_instance" "flask_ec2" {
+  ami           = "ami-0ff5003538b60d5ec" # Amazon Linux 2023 (Mumbai)
   instance_type = "t3.micro"
 
 
-  vpc_security_group_ids = [aws_security_group.python_sg.id]
+  vpc_security_group_ids = [aws_security_group.flask_sg.id]
 
   user_data = <<-EOF
               #!/bin/bash
               dnf update -y
               dnf install -y python3 pip git
-              pip3 install flask
 
-              cat <<EOT > /home/ec2-user/app.py
+              mkdir -p /opt/flask-app
+              cd /opt/flask-app
+
+              cat <<EOT > app.py
               from flask import Flask, jsonify
               app = Flask(__name__)
 
               @app.route("/")
               def home():
-                  return jsonify({"message": "Hello from Terraform CI/CD 🚀"})
+                  return jsonify({"message": "Deployed via GitHub Actions + Terraform 🚀"})
 
               app.run(host="0.0.0.0", port=8000)
               EOT
 
-              nohup python3 /home/ec2-user/app.py &
+              pip3 install flask
+              nohup python3 app.py &
               EOF
 
   tags = {
-    Name = "python-terraform-app"
+    Name = "flask-github-actions"
   }
+}
+
+output "ec2_public_ip" {
+  value = aws_instance.flask_ec2.public_ip
 }
