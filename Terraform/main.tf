@@ -58,7 +58,7 @@ resource "aws_instance" "flask_ec2" {
               EOF
 
   tags = {
-    Name = "flask-github-actions"
+    Name = "flask-app"
   }
 }
 
